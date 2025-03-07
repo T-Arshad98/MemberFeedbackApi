@@ -8,7 +8,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
  builder.Services.AddDbContext<MemberFeedbackApi.Data.FeedbackContext>(options =>{
-    var connString = builder.Configuration.GetConnectionString("Data:tm_db_con_str:ConnectionString");
+    var connString = builder.Configuration.GetConnectionString("tm_db_con_str");
     options.UseSqlServer(connString);
  });
 builder.Services.AddCors(options =>
@@ -26,7 +26,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
+app.UseCors("AllowFirebase");
 app.UseAuthorization();
 app.MapControllers();
 
