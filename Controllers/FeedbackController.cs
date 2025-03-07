@@ -21,7 +21,7 @@ namespace MemberFeedbackApi.Controllers
         [ResponseCache(Duration = 300)] // Cache for 5 minutes
         public async Task<ActionResult<IEnumerable<Feedback>>> GetApprovedFeedback()
         {
-            return await _context.Feedbacks.Where(f => f.IsApproved).ToListAsync();
+            return await _context.Feedback.Where(f => f.IsApproved).ToListAsync();
         }
 
         // Public: Get stats (average rating)
@@ -29,7 +29,7 @@ namespace MemberFeedbackApi.Controllers
         [ResponseCache(Duration = 300)]
         public async Task<ActionResult<object>> GetStats()
         {
-            var approved = await _context.Feedbacks.Where(f => f.IsApproved).ToListAsync();
+            var approved = await _context.Feedback.Where(f => f.IsApproved).ToListAsync();
             return new { AverageRating = approved.Any() ? approved.Average(f => f.Rating) : 0, Total = approved.Count };
         }
 
@@ -38,7 +38,7 @@ namespace MemberFeedbackApi.Controllers
         public async Task<ActionResult<Feedback>> PostFeedback(Feedback feedback)
         {
             feedback.IsApproved = false; // Pending approval
-            _context.Feedbacks.Add(feedback);
+            _context.Feedback.Add(feedback);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetApprovedFeedback), new { id = feedback.Id }, feedback);
         }
@@ -48,7 +48,7 @@ namespace MemberFeedbackApi.Controllers
         public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedback()
         {
             if (!IsAdmin()) return Unauthorized();
-            return await _context.Feedbacks.ToListAsync();
+            return await _context.Feedback.ToListAsync();
         }
 
         // Admin: Approve feedback
@@ -56,7 +56,7 @@ namespace MemberFeedbackApi.Controllers
         public async Task<IActionResult> ApproveFeedback(int id)
         {
             if (!IsAdmin()) return Unauthorized();
-            var feedback = await _context.Feedbacks.FindAsync(id);
+            var feedback = await _context.Feedback.FindAsync(id);
             if (feedback == null) return NotFound();
             feedback.IsApproved = true;
             await _context.SaveChangesAsync();
@@ -68,9 +68,9 @@ namespace MemberFeedbackApi.Controllers
         public async Task<IActionResult> RejectFeedback(int id)
         {
             if (!IsAdmin()) return Unauthorized();
-            var feedback = await _context.Feedbacks.FindAsync(id);
+            var feedback = await _context.Feedback.FindAsync(id);
             if (feedback == null) return NotFound();
-            _context.Feedbacks.Remove(feedback);
+            _context.Feedback.Remove(feedback);
             await _context.SaveChangesAsync();
             return NoContent();
         }
