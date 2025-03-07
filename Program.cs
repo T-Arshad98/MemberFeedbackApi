@@ -7,8 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
- builder.Services.AddDbContext<MemberFeedbackApi.Data.FeedbackContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+ builder.Services.AddDbContext<MemberFeedbackApi.Data.FeedbackContext>(options =>{
+    var connString = builder.Configuration.GetConnectionString("Data:tm_db_con_str:ConnectionString");
+    options.UseSqlServer(connString);
+ });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFirebase", builder => builder.WithOrigins("https://your-app.web.app").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
@@ -24,7 +26,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowFirebase");
+app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();
 
