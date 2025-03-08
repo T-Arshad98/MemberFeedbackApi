@@ -7,13 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
- builder.Services.AddDbContext<MemberFeedbackApi.Data.FeedbackContext>(options =>{
+builder.Services.AddDbContext<MemberFeedbackApi.Data.FeedbackContext>(options =>
+{
     var connString = builder.Configuration.GetConnectionString("tm_db_con_str");
     options.UseSqlServer(connString);
- });
+});
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFirebase", builder => builder.WithOrigins("https://your-app.web.app").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+    options.AddPolicy("AllowFirebase", builder => builder.WithOrigins("https://member-feedback--memberfeedback-2e570.us-central1.hosted.app/").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 });
 
 var app = builder.Build();
