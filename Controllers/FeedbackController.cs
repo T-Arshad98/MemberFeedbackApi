@@ -18,16 +18,16 @@ namespace MemberFeedbackApi.Controllers
 
         // Public: Get approved feedback
         [HttpGet]
-        [ResponseCache(Duration = 300)] // Cache for 5 minutes
-        public async Task<ActionResult<IEnumerable<Feedback>>> GetApprovedFeedback()
+/*         [ResponseCache(Duration = 300)] // Cache for 5 minutes
+ */        public async Task<ActionResult<IEnumerable<Feedback>>> GetApprovedFeedback()
         {
             return await _context.Feedbacks.Where(f => f.IsApproved).ToListAsync();
         }
 
         // Public: Get stats (average rating)
         [HttpGet("stats")]
-        [ResponseCache(Duration = 300)]
-        public async Task<ActionResult<object>> GetStats()
+/*         [ResponseCache(Duration = 300)]
+ */        public async Task<ActionResult<object>> GetStats()
         {
             var approved = await _context.Feedbacks.Where(f => f.IsApproved).ToListAsync();
             return new { AverageRating = approved.Any() ? approved.Average(f => f.Rating) : 0, Total = approved.Count };
