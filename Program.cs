@@ -14,7 +14,7 @@ builder.Services.AddDbContext<MemberFeedbackApi.Data.FeedbackContext>(options =>
 });
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFirebase", builder => builder.WithOrigins("https://member-feedback--memberfeedback-2e570.us-central1.hosted.app/").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+    options.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
 
 var app = builder.Build();
@@ -27,7 +27,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowFirebase");
+app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();
 
